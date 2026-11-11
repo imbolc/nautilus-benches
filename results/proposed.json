@@ -1,0 +1,691 @@
+{
+  "benchmark": "polymarket-subscription-memory",
+  "nautilus_revision": "0ab26e047dc2dfdb4a154e69e93d81fd1b566b93",
+  "fixture_sha256": "b6903d2859cb9005f8a83e2c5e35f6b26a8b655a38e73b04156bdd43b5655349",
+  "platform": "Linux-6.12.113+deb13-amd64-x86_64-with-glibc2.41",
+  "rustc": "rustc 1.99.1 (58cf8f9c3 2026-10-13)",
+  "profile": "release",
+  "allocator": "System with Rust global allocation counters",
+  "limits": {
+    "ram_bytes": 2147483648,
+    "swap_bytes": 0,
+    "cpu_quota": 1,
+    "cargo_jobs": 1,
+    "io_priority": "idle"
+  },
+  "cgroup_peak_memory_bytes_including_page_cache": 1452392448,
+  "source_sha256": {
+    "Cargo.toml": "0af9aaf471a88bd15f7d2ff1f3118b09d9c09103f84390f38af1869d5cb6896e",
+    "results/proposed.Cargo.lock": "2d9565e8c014bf2de26938b4a1133d1305b42f015bcea5ca1b1f2a20deecd566",
+    "src/fixture.rs": "3f8247b707381d1ea62124444ff308280d1c3cd83a9906a10249bce10772645a",
+    "src/lib.rs": "9df35f5b2be3f294586cb3c98bd742dee9c1d9ce44a807d44d623e2ddfd6dbfb",
+    "src/main.rs": "ee2024bc0c98d9727787204e5e903e860c8d4bd76572153758d14f973e9ce8be",
+    "src/subscriptions.rs": "cbc8c01fca72d72e1feb4ab2f9ce4292b8ac2e29a88f5756ce3e08361f299550",
+    "scripts/inside-limit.sh": "6dccb54725a6370e131d6e51bd8217c1203241a6ea622a659221280be23fe3ee",
+    "scripts/limited.sh": "961bd74631861fd546c38cd1d37190ddbb437287c7e2756854a888b1ff4e4ce8",
+    "scripts/proposed.py": "5e241c503291b272af46cdc76ada32bec132e90d6af7fca82ee342b3539a4757",
+    "scripts/run.py": "debf70198329d9d91ca90de85ce4a1421fa306ccbeaf0118eda943badb1879cc"
+  },
+  "samples": [
+    {
+      "benchmark": "polymarket-subscription-memory",
+      "instruments": 128,
+      "metrics": {
+        "allocation_calls": 20156,
+        "cpu_seconds": 0.003297485000000001,
+        "elapsed_seconds": 0.160820718,
+        "end_live_bytes": 11511632,
+        "end_rss": {
+          "current_kib": 26332,
+          "process_peak_kib": 26332
+        },
+        "peak_live_bytes": 12112397,
+        "reallocation_calls": 274,
+        "requested_bytes": 6009020,
+        "start_live_bytes": 10802358,
+        "start_rss": {
+          "current_kib": 24452,
+          "process_peak_kib": 24452
+        }
+      },
+      "nautilus_revision": "0ab26e047dc2dfdb4a154e69e93d81fd1b566b93",
+      "queued_futures": 640,
+      "queued_heap": {
+        "allocation_calls": 24936,
+        "live_bytes": 12105006,
+        "peak_live_bytes": 12105086,
+        "reallocation_calls": 1675,
+        "requested_bytes": 21813297
+      },
+      "queued_rss": {
+        "current_kib": 25064,
+        "process_peak_kib": 25064
+      },
+      "runtime_workers": 1,
+      "snapshot_heap": {
+        "allocation_calls": 39926,
+        "live_bytes": 11948686,
+        "peak_live_bytes": 12112397,
+        "reallocation_calls": 1943,
+        "requested_bytes": 26322537
+      },
+      "snapshot_rss": {
+        "current_kib": 26268,
+        "process_peak_kib": 26268
+      },
+      "subscription_families": 5,
+      "verified": {
+        "disconnected": true,
+        "initial_books": 128,
+        "initial_quotes": 128,
+        "wire_tokens": 128
+      },
+      "repeat": 1
+    },
+    {
+      "benchmark": "polymarket-subscription-memory",
+      "instruments": 128,
+      "metrics": {
+        "allocation_calls": 20336,
+        "cpu_seconds": 0.0034266290000000005,
+        "elapsed_seconds": 0.158061002,
+        "end_live_bytes": 11675172,
+        "end_rss": {
+          "current_kib": 26396,
+          "process_peak_kib": 26396
+        },
+        "peak_live_bytes": 12268225,
+        "reallocation_calls": 274,
+        "requested_bytes": 6089276,
+        "start_live_bytes": 10958186,
+        "start_rss": {
+          "current_kib": 24632,
+          "process_peak_kib": 24632
+        }
+      },
+      "nautilus_revision": "0ab26e047dc2dfdb4a154e69e93d81fd1b566b93",
+      "queued_futures": 640,
+      "queued_heap": {
+        "allocation_calls": 24937,
+        "live_bytes": 12260834,
+        "peak_live_bytes": 12260914,
+        "reallocation_calls": 1675,
+        "requested_bytes": 22338885
+      },
+      "queued_rss": {
+        "current_kib": 25180,
+        "process_peak_kib": 25180
+      },
+      "runtime_workers": 1,
+      "snapshot_heap": {
+        "allocation_calls": 40107,
+        "live_bytes": 12115506,
+        "peak_live_bytes": 12268225,
+        "reallocation_calls": 1943,
+        "requested_bytes": 26928381
+      },
+      "snapshot_rss": {
+        "current_kib": 26268,
+        "process_peak_kib": 26268
+      },
+      "subscription_families": 5,
+      "verified": {
+        "disconnected": true,
+        "initial_books": 128,
+        "initial_quotes": 128,
+        "wire_tokens": 128
+      },
+      "repeat": 2
+    },
+    {
+      "benchmark": "polymarket-subscription-memory",
+      "instruments": 128,
+      "metrics": {
+        "allocation_calls": 19551,
+        "cpu_seconds": 0.0033797239999999997,
+        "elapsed_seconds": 0.15632747,
+        "end_live_bytes": 11527780,
+        "end_rss": {
+          "current_kib": 26572,
+          "process_peak_kib": 26572
+        },
+        "peak_live_bytes": 12113121,
+        "reallocation_calls": 274,
+        "requested_bytes": 5817300,
+        "start_live_bytes": 10802538,
+        "start_rss": {
+          "current_kib": 24744,
+          "process_peak_kib": 24744
+        }
+      },
+      "nautilus_revision": "0ab26e047dc2dfdb4a154e69e93d81fd1b566b93",
+      "queued_futures": 640,
+      "queued_heap": {
+        "allocation_calls": 24938,
+        "live_bytes": 12105730,
+        "peak_live_bytes": 12105810,
+        "reallocation_calls": 1675,
+        "requested_bytes": 21814581
+      },
+      "queued_rss": {
+        "current_kib": 25292,
+        "process_peak_kib": 25292
+      },
+      "runtime_workers": 1,
+      "snapshot_heap": {
+        "allocation_calls": 39322,
+        "live_bytes": 11961330,
+        "peak_live_bytes": 12113121,
+        "reallocation_calls": 1943,
+        "requested_bytes": 26130997
+      },
+      "snapshot_rss": {
+        "current_kib": 26444,
+        "process_peak_kib": 26444
+      },
+      "subscription_families": 5,
+      "verified": {
+        "disconnected": true,
+        "initial_books": 128,
+        "initial_quotes": 128,
+        "wire_tokens": 128
+      },
+      "repeat": 3
+    },
+    {
+      "benchmark": "polymarket-subscription-memory",
+      "instruments": 512,
+      "metrics": {
+        "allocation_calls": 79826,
+        "cpu_seconds": 0.012147674,
+        "elapsed_seconds": 0.162573191,
+        "end_live_bytes": 19490768,
+        "end_rss": {
+          "current_kib": 39464,
+          "process_peak_kib": 39464
+        },
+        "peak_live_bytes": 21263179,
+        "reallocation_calls": 1048,
+        "requested_bytes": 24374295,
+        "start_live_bytes": 16035065,
+        "start_rss": {
+          "current_kib": 33572,
+          "process_peak_kib": 33572
+        }
+      },
+      "nautilus_revision": "0ab26e047dc2dfdb4a154e69e93d81fd1b566b93",
+      "queued_futures": 2560,
+      "queued_heap": {
+        "allocation_calls": 87046,
+        "live_bytes": 21255788,
+        "peak_live_bytes": 21255868,
+        "reallocation_calls": 4369,
+        "requested_bytes": 50390983
+      },
+      "queued_rss": {
+        "current_kib": 35072,
+        "process_peak_kib": 35072
+      },
+      "runtime_workers": 1,
+      "snapshot_heap": {
+        "allocation_calls": 146485,
+        "live_bytes": 20851619,
+        "peak_live_bytes": 21263179,
+        "reallocation_calls": 5411,
+        "requested_bytes": 68764569
+      },
+      "snapshot_rss": {
+        "current_kib": 39336,
+        "process_peak_kib": 39336
+      },
+      "subscription_families": 5,
+      "verified": {
+        "disconnected": true,
+        "initial_books": 512,
+        "initial_quotes": 512,
+        "wire_tokens": 512
+      },
+      "repeat": 1
+    },
+    {
+      "benchmark": "polymarket-subscription-memory",
+      "instruments": 512,
+      "metrics": {
+        "allocation_calls": 77535,
+        "cpu_seconds": 0.012343418000000002,
+        "elapsed_seconds": 0.164628501,
+        "end_live_bytes": 19462020,
+        "end_rss": {
+          "current_kib": 39424,
+          "process_peak_kib": 39424
+        },
+        "peak_live_bytes": 21255935,
+        "reallocation_calls": 1047,
+        "requested_bytes": 23617711,
+        "start_live_bytes": 16029997,
+        "start_rss": {
+          "current_kib": 33636,
+          "process_peak_kib": 33636
+        }
+      },
+      "nautilus_revision": "0ab26e047dc2dfdb4a154e69e93d81fd1b566b93",
+      "queued_futures": 2560,
+      "queued_heap": {
+        "allocation_calls": 87045,
+        "live_bytes": 21248544,
+        "peak_live_bytes": 21248624,
+        "reallocation_calls": 4370,
+        "requested_bytes": 50376775
+      },
+      "queued_rss": {
+        "current_kib": 35128,
+        "process_peak_kib": 35128
+      },
+      "runtime_workers": 1,
+      "snapshot_heap": {
+        "allocation_calls": 144194,
+        "live_bytes": 20811543,
+        "peak_live_bytes": 21255935,
+        "reallocation_calls": 5411,
+        "requested_bytes": 67998145
+      },
+      "snapshot_rss": {
+        "current_kib": 39360,
+        "process_peak_kib": 39360
+      },
+      "subscription_families": 5,
+      "verified": {
+        "disconnected": true,
+        "initial_books": 512,
+        "initial_quotes": 512,
+        "wire_tokens": 512
+      },
+      "repeat": 2
+    },
+    {
+      "benchmark": "polymarket-subscription-memory",
+      "instruments": 512,
+      "metrics": {
+        "allocation_calls": 81181,
+        "cpu_seconds": 0.011846315,
+        "elapsed_seconds": 0.162457062,
+        "end_live_bytes": 19492432,
+        "end_rss": {
+          "current_kib": 39500,
+          "process_peak_kib": 39500
+        },
+        "peak_live_bytes": 21256651,
+        "reallocation_calls": 1047,
+        "requested_bytes": 24705175,
+        "start_live_bytes": 16035065,
+        "start_rss": {
+          "current_kib": 33392,
+          "process_peak_kib": 33392
+        }
+      },
+      "nautilus_revision": "0ab26e047dc2dfdb4a154e69e93d81fd1b566b93",
+      "queued_futures": 2560,
+      "queued_heap": {
+        "allocation_calls": 87043,
+        "live_bytes": 21249260,
+        "peak_live_bytes": 21249340,
+        "reallocation_calls": 4368,
+        "requested_bytes": 50639313
+      },
+      "queued_rss": {
+        "current_kib": 34968,
+        "process_peak_kib": 34968
+      },
+      "runtime_workers": 1,
+      "snapshot_heap": {
+        "allocation_calls": 147840,
+        "live_bytes": 20856307,
+        "peak_live_bytes": 21256651,
+        "reallocation_calls": 5409,
+        "requested_bytes": 69356883
+      },
+      "snapshot_rss": {
+        "current_kib": 39372,
+        "process_peak_kib": 39372
+      },
+      "subscription_families": 5,
+      "verified": {
+        "disconnected": true,
+        "initial_books": 512,
+        "initial_quotes": 512,
+        "wire_tokens": 512
+      },
+      "repeat": 3
+    },
+    {
+      "benchmark": "polymarket-subscription-memory",
+      "instruments": 2048,
+      "metrics": {
+        "allocation_calls": 309163,
+        "cpu_seconds": 0.049705453999999996,
+        "elapsed_seconds": 0.208718495,
+        "end_live_bytes": 50831565,
+        "end_rss": {
+          "current_kib": 89040,
+          "process_peak_kib": 89040
+        },
+        "peak_live_bytes": 57196936,
+        "reallocation_calls": 4139,
+        "requested_bytes": 95368434,
+        "start_live_bytes": 36307381,
+        "start_rss": {
+          "current_kib": 63172,
+          "process_peak_kib": 65172
+        }
+      },
+      "nautilus_revision": "0ab26e047dc2dfdb4a154e69e93d81fd1b566b93",
+      "queued_futures": 10240,
+      "queued_heap": {
+        "allocation_calls": 332095,
+        "live_bytes": 57189545,
+        "peak_live_bytes": 57189625,
+        "reallocation_calls": 14573,
+        "requested_bytes": 162037949
+      },
+      "queued_rss": {
+        "current_kib": 72696,
+        "process_peak_kib": 72696
+      },
+      "runtime_workers": 1,
+      "snapshot_heap": {
+        "allocation_calls": 560137,
+        "live_bytes": 55881401,
+        "peak_live_bytes": 57196936,
+        "reallocation_calls": 18704,
+        "requested_bytes": 233435983
+      },
+      "snapshot_rss": {
+        "current_kib": 88976,
+        "process_peak_kib": 88976
+      },
+      "subscription_families": 5,
+      "verified": {
+        "disconnected": true,
+        "initial_books": 2048,
+        "initial_quotes": 2048,
+        "wire_tokens": 2048
+      },
+      "repeat": 1
+    },
+    {
+      "benchmark": "polymarket-subscription-memory",
+      "instruments": 2048,
+      "metrics": {
+        "allocation_calls": 306759,
+        "cpu_seconds": 0.06361740600000002,
+        "elapsed_seconds": 0.215092206,
+        "end_live_bytes": 50545025,
+        "end_rss": {
+          "current_kib": 88924,
+          "process_peak_kib": 88924
+        },
+        "peak_live_bytes": 56910396,
+        "reallocation_calls": 4139,
+        "requested_bytes": 94440202,
+        "start_live_bytes": 36020841,
+        "start_rss": {
+          "current_kib": 63080,
+          "process_peak_kib": 65544
+        }
+      },
+      "nautilus_revision": "0ab26e047dc2dfdb4a154e69e93d81fd1b566b93",
+      "queued_futures": 10240,
+      "queued_heap": {
+        "allocation_calls": 332104,
+        "live_bytes": 56903005,
+        "peak_live_bytes": 56903085,
+        "reallocation_calls": 14573,
+        "requested_bytes": 163611780
+      },
+      "queued_rss": {
+        "current_kib": 72600,
+        "process_peak_kib": 72600
+      },
+      "runtime_workers": 1,
+      "snapshot_heap": {
+        "allocation_calls": 557744,
+        "live_bytes": 55598453,
+        "peak_live_bytes": 56910396,
+        "reallocation_calls": 18704,
+        "requested_bytes": 234081646
+      },
+      "snapshot_rss": {
+        "current_kib": 88796,
+        "process_peak_kib": 88796
+      },
+      "subscription_families": 5,
+      "verified": {
+        "disconnected": true,
+        "initial_books": 2048,
+        "initial_quotes": 2048,
+        "wire_tokens": 2048
+      },
+      "repeat": 2
+    },
+    {
+      "benchmark": "polymarket-subscription-memory",
+      "instruments": 2048,
+      "metrics": {
+        "allocation_calls": 318614,
+        "cpu_seconds": 0.051292064,
+        "elapsed_seconds": 0.202540405,
+        "end_live_bytes": 50831925,
+        "end_rss": {
+          "current_kib": 89492,
+          "process_peak_kib": 89492
+        },
+        "peak_live_bytes": 57197168,
+        "reallocation_calls": 4139,
+        "requested_bytes": 97725214,
+        "start_live_bytes": 36307613,
+        "start_rss": {
+          "current_kib": 63360,
+          "process_peak_kib": 65624
+        }
+      },
+      "nautilus_revision": "0ab26e047dc2dfdb4a154e69e93d81fd1b566b93",
+      "queued_futures": 10240,
+      "queued_heap": {
+        "allocation_calls": 330049,
+        "live_bytes": 57189777,
+        "peak_live_bytes": 57189857,
+        "reallocation_calls": 14571,
+        "requested_bytes": 163602477
+      },
+      "queued_rss": {
+        "current_kib": 72880,
+        "process_peak_kib": 72880
+      },
+      "runtime_workers": 1,
+      "snapshot_heap": {
+        "allocation_calls": 567543,
+        "live_bytes": 55877169,
+        "peak_live_bytes": 57197168,
+        "reallocation_calls": 18702,
+        "requested_bytes": 237357323
+      },
+      "snapshot_rss": {
+        "current_kib": 89300,
+        "process_peak_kib": 89300
+      },
+      "subscription_families": 5,
+      "verified": {
+        "disconnected": true,
+        "initial_books": 2048,
+        "initial_quotes": 2048,
+        "wire_tokens": 2048
+      },
+      "repeat": 3
+    },
+    {
+      "benchmark": "polymarket-subscription-memory",
+      "instruments": 8000,
+      "metrics": {
+        "allocation_calls": 1176171,
+        "cpu_seconds": 0.213489262,
+        "elapsed_seconds": 0.387137522,
+        "end_live_bytes": 175582373,
+        "end_rss": {
+          "current_kib": 287680,
+          "process_peak_kib": 287680
+        },
+        "peak_live_bytes": 199635722,
+        "reallocation_calls": 16111,
+        "requested_bytes": 364618739,
+        "start_live_bytes": 118000697,
+        "start_rss": {
+          "current_kib": 185196,
+          "process_peak_kib": 199808
+        }
+      },
+      "nautilus_revision": "0ab26e047dc2dfdb4a154e69e93d81fd1b566b93",
+      "queued_futures": 40000,
+      "queued_heap": {
+        "allocation_calls": 1288130,
+        "live_bytes": 199628331,
+        "peak_live_bytes": 199628411,
+        "reallocation_calls": 55602,
+        "requested_bytes": 605299423
+      },
+      "queued_rss": {
+        "current_kib": 220364,
+        "process_peak_kib": 220364
+      },
+      "runtime_workers": 1,
+      "snapshot_heap": {
+        "allocation_calls": 2147977,
+        "live_bytes": 194609739,
+        "peak_live_bytes": 199635722,
+        "reallocation_calls": 71697,
+        "requested_bytes": 876187922
+      },
+      "snapshot_rss": {
+        "current_kib": 287552,
+        "process_peak_kib": 287552
+      },
+      "subscription_families": 5,
+      "verified": {
+        "disconnected": true,
+        "initial_books": 8000,
+        "initial_quotes": 8000,
+        "wire_tokens": 8000
+      },
+      "repeat": 1
+    },
+    {
+      "benchmark": "polymarket-subscription-memory",
+      "instruments": 8000,
+      "metrics": {
+        "allocation_calls": 1230492,
+        "cpu_seconds": 0.2211564,
+        "elapsed_seconds": 0.392256239,
+        "end_live_bytes": 175582733,
+        "end_rss": {
+          "current_kib": 285920,
+          "process_peak_kib": 285920
+        },
+        "peak_live_bytes": 199636082,
+        "reallocation_calls": 16108,
+        "requested_bytes": 380314467,
+        "start_live_bytes": 118001057,
+        "start_rss": {
+          "current_kib": 183500,
+          "process_peak_kib": 198972
+        }
+      },
+      "nautilus_revision": "0ab26e047dc2dfdb4a154e69e93d81fd1b566b93",
+      "queued_futures": 40000,
+      "queued_heap": {
+        "allocation_calls": 1288120,
+        "live_bytes": 199628691,
+        "peak_live_bytes": 199628771,
+        "reallocation_calls": 55595,
+        "requested_bytes": 602981005
+      },
+      "queued_rss": {
+        "current_kib": 218664,
+        "process_peak_kib": 218664
+      },
+      "runtime_workers": 1,
+      "snapshot_heap": {
+        "allocation_calls": 2202287,
+        "live_bytes": 194704987,
+        "peak_live_bytes": 199636082,
+        "reallocation_calls": 71690,
+        "requested_bytes": 889565392
+      },
+      "snapshot_rss": {
+        "current_kib": 285856,
+        "process_peak_kib": 285856
+      },
+      "subscription_families": 5,
+      "verified": {
+        "disconnected": true,
+        "initial_books": 8000,
+        "initial_quotes": 8000,
+        "wire_tokens": 8000
+      },
+      "repeat": 2
+    },
+    {
+      "benchmark": "polymarket-subscription-memory",
+      "instruments": 8000,
+      "metrics": {
+        "allocation_calls": 1216293,
+        "cpu_seconds": 0.219730036,
+        "elapsed_seconds": 0.38541304,
+        "end_live_bytes": 175582733,
+        "end_rss": {
+          "current_kib": 286764,
+          "process_peak_kib": 286764
+        },
+        "peak_live_bytes": 199636082,
+        "reallocation_calls": 16108,
+        "requested_bytes": 375723011,
+        "start_live_bytes": 118001057,
+        "start_rss": {
+          "current_kib": 184576,
+          "process_peak_kib": 199708
+        }
+      },
+      "nautilus_revision": "0ab26e047dc2dfdb4a154e69e93d81fd1b566b93",
+      "queued_futures": 40000,
+      "queued_heap": {
+        "allocation_calls": 1288117,
+        "live_bytes": 199628691,
+        "peak_live_bytes": 199628771,
+        "reallocation_calls": 55583,
+        "requested_bytes": 603123028
+      },
+      "queued_rss": {
+        "current_kib": 219740,
+        "process_peak_kib": 219740
+      },
+      "runtime_workers": 1,
+      "snapshot_heap": {
+        "allocation_calls": 2188083,
+        "live_bytes": 194612131,
+        "peak_live_bytes": 199636082,
+        "reallocation_calls": 71678,
+        "requested_bytes": 885115895
+      },
+      "snapshot_rss": {
+        "current_kib": 286572,
+        "process_peak_kib": 286572
+      },
+      "subscription_families": 5,
+      "verified": {
+        "disconnected": true,
+        "initial_books": 8000,
+        "initial_quotes": 8000,
+        "wire_tokens": 8000
+      },
+      "repeat": 3
+    }
+  ]
+}

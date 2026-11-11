@@ -5,6 +5,7 @@ import os
 import platform
 import subprocess
 import tempfile
+import tomllib
 from pathlib import Path
 
 BENCHMARK = "polymarket-subscription-memory"
@@ -42,8 +43,13 @@ def clean(directory):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--repeats", type=int, default=3)
+    parser.add_argument("--output", type=Path, default=Path("results/baseline.json"))
+    parser.add_argument("--revision")
+    parser.add_argument("--lockfile", type=Path, default=Path("Cargo.lock"))
     args = parser.parse_args()
     assert args.repeats > 0
+    manifest = tomllib.loads((ROOT / "Cargo.toml").read_text())
+    revision = args.revision or manifest["dependencies"]["nautilus-polymarket"]["rev"]
     group = cgroup()
     target = Path(os.environ.get("CARGO_TARGET_DIR", ROOT / "target"))
     binary = target / "release/nautilus-bench"
@@ -70,15 +76,18 @@ def main():
                 if result.returncode:
                     raise RuntimeError(f"{command}: exit {result.returncode}\n{result.stdout}\n{result.stderr}")
                 row = json.loads(result.stdout)
+                assert row["nautilus_revision"] == revision, "binary revision differs from requested source"
                 row["repeat"] = repeat
                 rows.append(row)
                 print(f"{mode} {count}, repeat {repeat}: {row['metrics']['cpu_seconds']:.3f}s CPU", flush=True)
             finally:
                 clean(directory)
-    paths = [ROOT / "Cargo.toml", ROOT / "Cargo.lock", *sorted((ROOT / "src").glob("*.rs")), *sorted((ROOT / "scripts").glob("*.*"))]
+    paths = [ROOT / "Cargo.toml", ROOT / args.lockfile, *sorted((ROOT / "src").glob("*.rs")), *sorted((ROOT / "scripts").glob("*.*"))]
     source_hashes = {str(path.relative_to(ROOT)): digest(path) for path in paths if path.is_file()}
     output = {
         "benchmark": BENCHMARK,
+        "nautilus_revision": revision,
+        "fixture_sha256": digest(ROOT / "data/SHA256SUMS"),
         "platform": platform.platform(),
         "rustc": subprocess.check_output(["rustc", "--version"], text=True).strip(),
         "profile": "release",
@@ -88,7 +97,7 @@ def main():
         "source_sha256": source_hashes,
         "samples": rows,
     }
-    destination = ROOT / "results/baseline.json"
+    destination = ROOT / args.output
     destination.parent.mkdir(exist_ok=True)
     destination.write_text(json.dumps(output, indent=2) + "\n")
     print(f"Verified {len(rows)} samples; saved {destination}", flush=True)

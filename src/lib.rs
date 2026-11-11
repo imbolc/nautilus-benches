@@ -8,7 +8,10 @@ use std::{
 use anyhow::{Context, Result, ensure};
 use serde::Serialize;
 
-pub const NAUTILUS_REVISION: &str = "86e640d623747e5f07b7b7df90e4585193341055";
+pub const NAUTILUS_REVISION: &str = match option_env!("NAUTILUS_BENCH_REVISION") {
+    Some(revision) => revision,
+    None => "6ba49340934e79c53077cb2cbf174a42cb6d7445",
+};
 
 pub struct CountingAllocator;
 static ALLOCS: AtomicU64 = AtomicU64::new(0);

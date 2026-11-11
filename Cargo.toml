@@ -8,11 +8,11 @@ rust-version = "1.99"
 anyhow = "1"
 libc = "0.2"
 axum = { version = "0.8", features = ["ws"] }
-nautilus-common = { git = "https://github.com/nautechsystems/nautilus_trader", rev = "86e640d623747e5f07b7b7df90e4585193341055", features = ["live"] }
-nautilus-core = { git = "https://github.com/nautechsystems/nautilus_trader", rev = "86e640d623747e5f07b7b7df90e4585193341055" }
-nautilus-model = { git = "https://github.com/nautechsystems/nautilus_trader", rev = "86e640d623747e5f07b7b7df90e4585193341055" }
-nautilus-network = { git = "https://github.com/nautechsystems/nautilus_trader", rev = "86e640d623747e5f07b7b7df90e4585193341055", default-features = false }
-nautilus-polymarket = { git = "https://github.com/nautechsystems/nautilus_trader", rev = "86e640d623747e5f07b7b7df90e4585193341055" }
+nautilus-common = { git = "https://github.com/nautechsystems/nautilus_trader", rev = "6ba49340934e79c53077cb2cbf174a42cb6d7445", features = ["live"] }
+nautilus-core = { git = "https://github.com/nautechsystems/nautilus_trader", rev = "6ba49340934e79c53077cb2cbf174a42cb6d7445" }
+nautilus-model = { git = "https://github.com/nautechsystems/nautilus_trader", rev = "6ba49340934e79c53077cb2cbf174a42cb6d7445" }
+nautilus-network = { git = "https://github.com/nautechsystems/nautilus_trader", rev = "6ba49340934e79c53077cb2cbf174a42cb6d7445", default-features = false }
+nautilus-polymarket = { git = "https://github.com/nautechsystems/nautilus_trader", rev = "6ba49340934e79c53077cb2cbf174a42cb6d7445" }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 tokio = { version = "1", features = ["macros", "rt-multi-thread", "sync", "time", "net"] }

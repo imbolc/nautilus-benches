@@ -1,90 +1,79 @@
 # Polymarket subscription memory benchmark
 
-Measures the memory held by pending Polymarket subscription futures using the real
-Nautilus data client and a local HTTP/WebSocket fixture. Nautilus is pinned to
-official revision `86e640d623747e5f07b7b7df90e4585193341055`.
-No Nautilus source changes are required.
+Pending Polymarket reconciliation tasks embed large WebSocket-operation futures.
+This benchmark measures their transient memory cost using the real Nautilus data
+client and a local HTTP/WebSocket fixture. The proposed change boxes wire operations
+after acquiring the existing reconciliation lock, keeping waiting tasks small.
 
-## Run
+Linux, Rust 1.99+, Python 3.11+, curl and a user systemd session are required.
+Run every build and sample through `scripts/limited.sh`: **2 GiB RAM, zero swap,
+one CPU**, one Cargo job, low CPU and idle I/O priority. Concurrent runs are rejected.
 
-Linux, Rust 1.99 or later, Python 3, curl and a user systemd session are required.
-Run commands from this checkout:
+## Baseline
+
+Official Nautilus `6ba49340934e79c53077cb2cbf174a42cb6d7445`, pinned in `Cargo.toml` and `Cargo.lock`:
 
 ```sh
 sh scripts/limited.sh cargo build -q --release
-sh scripts/limited.sh target/release/nautilus-bench allocator-check
 sh scripts/limited.sh python3 scripts/run.py
 ```
 
-The wrapper verifies a cgroup with 2 GiB RAM, zero swap and one CPU before running
-any command. Builds use one Cargo job; work runs at low CPU and idle I/O priority.
-Use the wrapper for builds and every benchmark invocation. Concurrent runs share
-one unit name and are rejected.
+| Instruments | Queued heap added (MiB) | Peak heap added (MiB) | Peak RSS (MiB) | CPU (s) |
+| ---: | ---: | ---: | ---: | ---: |
+| 128 | 14.38 | 14.38 | 39.18 | 0.006 |
+| 512 | 57.51 | 57.51 | 90.13 | 0.026 |
+| 2,048 | 230.06 | 230.06 | 297.24 | 0.107 |
+| 8,000 | 898.71 | 898.71 | 1100.96 | 0.418 |
 
-## Workload
+[Raw baseline results](results/baseline.json)
 
-Each sample runs in a fresh process. A separate fixture process serves saved Gamma
-metadata and deterministic initial WebSocket book snapshots. Setup connects the
-real client and loads instruments before measurement.
+## Proposed version
 
-The benchmark holds Nautilus's single runtime worker at a gate, submits book,
-quote, trade, status and close subscriptions for every instrument, and snapshots
-the queued heap and RSS before releasing the gate. This isolates a controlled
-burst of pending futures. It measures a burst upper bound, not typical startup
-latency or a full live recorder.
+Use a clean Nautilus checkout at `0ab26e047dc2dfdb4a154e69e93d81fd1b566b93`
+on branch `reduce-polymarket-subscription-memory`. Adjust the checkout path below:
 
-After release, every instrument must receive an initial book and quote. The wire
-subscription token set must match the loaded instruments exactly. Measurement
-ends after native disconnect drains the client's tasks. Snapshot-time metrics
-are intermediate observations; post-disconnect metrics establish lifecycle
-completion. No arbitrary sleep is used as proof that tasks completed.
+```sh
+sh scripts/limited.sh python3 scripts/proposed.py ../nautilus_trader
+```
+
+| Instruments | Queued heap added (MiB) | Peak heap added (MiB) | Peak RSS (MiB) | CPU (s) |
+| ---: | ---: | ---: | ---: | ---: |
+| 128 | 1.24 | 1.25 | 25.78 | 0.003 |
+| 512 | 4.98 | 4.98 | 38.54 | 0.012 |
+| 2,048 | 19.91 | 19.92 | 86.95 | 0.051 |
+| 8,000 | 77.85 | 77.85 | 280.04 | 0.220 |
+
+[Raw proposed results](results/proposed.json) and
+[resolved proposed lockfile](results/proposed.Cargo.lock).
+The runner records the checkout revision, patches dependencies locally, and restores
+the baseline lockfile afterward. The allocator self-check runs before sampling.
+
+## Reading the results
+
+Each row is the median of three fresh processes with one Nautilus runtime worker,
+using rustc 1.99.1 (58cf8f9c3 2026-10-13). Both versions use the same fixture, harness and workload.
+Raw results include allocation/reallocation calls, requested bytes, live/peak heap,
+current/peak RSS, CPU and elapsed time, plus source and fixture checksums.
+
+After preloading instruments, the harness gates the worker, submits book, quote,
+trade, status and close subscriptions, and measures the queued state. It releases
+the gate, verifies every wire token and initial book/quote, then disconnects through
+the native client lifecycle. Peak heap covers the entire measured phase through
+disconnect. [Workload implementation](src/subscriptions.rs)
+
+Queued and peak heap columns subtract live heap at phase start. They include intents
+and registration state as well as futures. Rust counters exclude native C allocations;
+process RSS includes setup. The fixture process is excluded from process metrics
+but shares the aggregate cgroup limit. Recorded cgroup peaks also include builds.
+This gated burst is an upper-bound workload,
+not a live-deployment memory estimate. CPU includes counter overhead and does not
+establish uninstrumented application throughput. Failure, reconnect and book recovery
+require Nautilus's separate regression tests.
 
 ## Inputs
 
-The 40 checksummed Gamma pages contain 4,000 real markets and 8,000 outcome tokens,
-captured on 2026-10-19 UTC. Original files remain unchanged. The local server
-sets market expiry to 2099-01-01 to keep this historical fixture independent of
-the execution date. Book messages are synthetic: one bid at 0.4, one ask at 0.6,
-fixed sizes, timestamp and v1 protocol. Fixture acquisition and loading are outside
-the measured phase. Every connection targets loopback; no live venue is contacted.
-
-## Measurements
-
-Rust allocation counters wrap the system allocator without backtraces. They count
-successful allocation/reallocation calls and requested bytes, including the full
-new size of a successful reallocation. Live bytes include pre-existing allocations;
-peak live bytes reset at the phase boundary. Native C allocations are excluded.
-RSS covers the benchmark process; its high-water mark includes setup. The fixture
-server is excluded from these process metrics but shares the aggregate cgroup
-limit. CPU uses the process CPU clock and includes Nautilus worker threads.
-Counter overhead and small measurement-bookkeeping allocations are included.
-
-This is a baseline reproducer, not evidence of an optimization or a memory leak.
-It verifies the five subscription request paths, initial books/quotes and native
-shutdown. Failure, reconnect and recovery behavior remain covered by Nautilus's
-own regression tests, rather than being inferred from this performance workload.
-Results are written to `results/baseline.json` after successful verification.
-
-## Baseline results
-
-Median of three fresh processes per case, using the pinned revision and lockfile.
-Measured with rustc 1.99.1 (58cf8f9c3 2026-10-13). CPU timings include allocator-counter
-overhead; they are not uninstrumented application throughput.
-
-The queued heap delta includes subscription intents and registration state as well
-as pending futures; it is not allocation-stack attribution. CPU covers the burst
-through initial data and disconnect, with instrument loading excluded.
-
-| Instruments | Queued live heap added (MiB) | Process peak RSS (MiB) | CPU (s) |
-| ---: | ---: | ---: | ---: |
-| 128 | 14.38 | 37.96 | 0.006 |
-| 512 | 57.51 | 90.52 | 0.024 |
-| 2,048 | 230.06 | 297.35 | 0.097 |
-| 8,000 | 898.71 | 1100.81 | 0.399 |
-
-All 12 samples verified every expected wire token, initial book and quote, and
-native disconnect. These burst results do not establish the peak memory of a live
-deployment.
-
-The aggregate cgroup peak was 1208.8 MiB, including child processes and page cache,
-with zero swap. [Raw results](results/baseline.json).
+The [checksummed fixture](data/SHA256SUMS) contains 40 untouched Gamma pages captured
+on 2026-10-19 UTC: 4,000 markets and 8,000 outcome tokens. Only served copies have
+expiry moved to 2099-01-01. Initial v1 books are synthetic, with bid 0.4, ask 0.6 and
+fixed sizes/timestamps. Acquisition and loading precede measurement; all connections
+target loopback and no live venue is contacted.
