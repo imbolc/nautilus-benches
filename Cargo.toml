@@ -1,0 +1,20 @@
+[package]
+name = "polymarket-retained-refresh"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.100"
+
+[dependencies]
+anyhow = "1"
+axum = "0.8"
+nautilus-common = { git = "https://github.com/nautechsystems/nautilus_trader", rev = "b9e6f468f8dc35088a06742aadb1866e9c274328", features = ["live"] }
+nautilus-core = { git = "https://github.com/nautechsystems/nautilus_trader", rev = "b9e6f468f8dc35088a06742aadb1866e9c274328" }
+nautilus-model = { git = "https://github.com/nautechsystems/nautilus_trader", rev = "b9e6f468f8dc35088a06742aadb1866e9c274328" }
+nautilus-network = { git = "https://github.com/nautechsystems/nautilus_trader", rev = "b9e6f468f8dc35088a06742aadb1866e9c274328", default-features = false }
+nautilus-polymarket = { git = "https://github.com/nautechsystems/nautilus_trader", rev = "b9e6f468f8dc35088a06742aadb1866e9c274328" }
+serde_json = "1"
+tokio = { version = "1", features = ["macros", "net", "rt-multi-thread", "sync", "time"] }
+
+[profile.dev]
+debug = 0
+incremental = false

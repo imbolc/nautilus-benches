@@ -1,0 +1,18 @@
+{
+  "id": "1",
+  "conditionId": "0x0000000000000000000000000000000000000000000000000000000000000001",
+  "question": "Synthetic retained-refresh market",
+  "slug": "synthetic-retained-refresh",
+  "startDate": "2026-01-01T00:00:00Z",
+  "endDate": "2099-01-01T00:00:00Z",
+  "active": true,
+  "closed": false,
+  "acceptingOrders": true,
+  "enableOrderBook": true,
+  "version": "v1",
+  "clobTokenIds": "[\"1\",\"2\"]",
+  "outcomes": "[\"Yes\",\"No\"]",
+  "orderPriceMinTickSize": 0.001,
+  "orderMinSize": 1,
+  "negRisk": false
+}

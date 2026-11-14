@@ -1,0 +1,64 @@
+{
+  "nautilus_revision": "af1811c29252929de0b3925060fff316ae16893e",
+  "run_at_utc": "2026-11-14T11:54:22.508175+00:00",
+  "rustc": "rustc 1.100.0 (0ef1bc386 2026-11-09)",
+  "expected_outcome": "fresh",
+  "exit_code": 0,
+  "cargo_lock_sha256": "8580cd9e9179585b06c61edae0addc56717f5ca8f9062d0ea90c84df28b5453e",
+  "source_sha256": {
+    "Cargo.toml": "1f568be090d5e3c8516e2ab9f510231f0e5a6ba505b75b44628c446f393c0b73",
+    "src/fixture.rs": "99cd06b0130396d87aab5d5febcfd2c4531580facad48ddd5914547814bddf73",
+    "src/main.rs": "ef255356cd059b9db00ee888019562a813a0841d7b60f95dc8ef954ef2b1b7aa",
+    "scripts/inside-limit.sh": "765bfdad749eeb17d251627830167b19764f6d00640da790c4eb2ba7d220230d",
+    "scripts/limited.sh": "e90db2362a693122638811cb27a6697d95e12e633245308ae0138b80c8a030dc",
+    "scripts/run.py": "d8fb425a018db07ca715024649b9af9329380021efec0970fe0ebd4ec7943eb7",
+    "data/market.json": "92c60a8333e9967d947bf3dee9a3c8f80cbffc97547fe09411b4e94cbb282c9f"
+  },
+  "run": {
+    "discovery_end_date_max": "2099-06-01T00:00:00Z",
+    "expected_expiration_ns": 4099766400000000000,
+    "fresh": true,
+    "instrument_id": "0x0000000000000000000000000000000000000000000000000000000000000001-1.POLYMARKET",
+    "instrument_updates_after_revision": 1,
+    "observation_seconds": 65,
+    "observed_expiration_ns": 4099766400000000000,
+    "original_expiration_ns": 4070908800000000000,
+    "position_id": "P-RETAINED",
+    "refresh_interval_seconds": 60,
+    "requests": [
+      {
+        "after_revision": false,
+        "query": {
+          "active": "true",
+          "closed": "false",
+          "end_date_max": "2099-06-01T00:00:00Z",
+          "limit": "100"
+        },
+        "returned_end_date": "2099-01-01T00:00:00Z",
+        "returned_markets": 1
+      },
+      {
+        "after_revision": true,
+        "query": {
+          "condition_ids": "0x0000000000000000000000000000000000000000000000000000000000000001",
+          "limit": "100"
+        },
+        "returned_end_date": "2099-12-01T00:00:00Z",
+        "returned_markets": 1
+      },
+      {
+        "after_revision": true,
+        "query": {
+          "active": "true",
+          "closed": "false",
+          "end_date_max": "2099-06-01T00:00:00Z",
+          "limit": "100"
+        },
+        "returned_end_date": null,
+        "returned_markets": 0
+      }
+    ],
+    "scenario": "open-position-outside-discovery",
+    "venue_end_date_after_revision": "2099-12-01T00:00:00Z"
+  }
+}
