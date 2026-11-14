@@ -1,0 +1,6 @@
+[patch."https://github.com/nautechsystems/nautilus_trader"]
+nautilus-common = { git = "https://github.com/imbolc/nautilus_trader", rev = "3147f20283c4355212be0d93429f2f92cdbd8264" }
+nautilus-core = { git = "https://github.com/imbolc/nautilus_trader", rev = "3147f20283c4355212be0d93429f2f92cdbd8264" }
+nautilus-model = { git = "https://github.com/imbolc/nautilus_trader", rev = "3147f20283c4355212be0d93429f2f92cdbd8264" }
+nautilus-network = { git = "https://github.com/imbolc/nautilus_trader", rev = "3147f20283c4355212be0d93429f2f92cdbd8264" }
+nautilus-polymarket = { git = "https://github.com/imbolc/nautilus_trader", rev = "3147f20283c4355212be0d93429f2f92cdbd8264" }

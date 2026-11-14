@@ -9,7 +9,10 @@ use nautilus_common::{
     messages::DataEvent,
     msgbus,
 };
-use nautilus_core::{UUID4, UnixNanos, datetime::iso8601_to_unix_nanos};
+use nautilus_core::{
+    UUID4, UnixNanos,
+    datetime::{iso8601_to_unix_nanos, unix_nanos_to_iso8601},
+};
 use nautilus_model::{
     data::Data,
     enums::{OrderSide, PositionSide},
@@ -28,24 +31,19 @@ use nautilus_polymarket::{
     },
     websocket::pool::PolymarketMarketConnectionPool,
 };
-use serde_json::{Value, json};
-
 const OBSERVATION_SECS: u64 = 65;
 
 fn main() -> ExitCode {
     let result = nautilus_common::live::get_runtime()
         .block_on(tokio::task::LocalSet::new().run_until(run()));
     match result {
-        Ok(report) => {
-            println!("{}", serde_json::to_string_pretty(&report).unwrap());
-            if report["fresh"] == true {
-                ExitCode::SUCCESS
-            } else {
-                eprintln!(
-                    "Stale metadata reproduced: the emitted definition still has the old closing time"
-                );
-                ExitCode::from(1)
-            }
+        Ok(true) => {
+            println!("FRESH");
+            ExitCode::SUCCESS
+        }
+        Ok(false) => {
+            println!("STALE");
+            ExitCode::from(1)
         }
         Err(e) => {
             eprintln!("{e:#}");
@@ -54,14 +52,14 @@ fn main() -> ExitCode {
     }
 }
 
-async fn run() -> Result<Value> {
+async fn run() -> Result<bool> {
     let (venue, endpoint, server) = fixture::serve().await?;
     let result = reproduce(&venue, &endpoint).await;
     server.abort();
     result
 }
 
-async fn reproduce(venue: &fixture::Venue, endpoint: &str) -> Result<Value> {
+async fn reproduce(venue: &fixture::Venue, endpoint: &str) -> Result<bool> {
     let (tx, mut rx) = tokio::sync::mpsc::unbounded_channel::<DataEvent>();
     set_data_event_sender(tx);
     let (system_tx, _system_rx) = tokio::sync::mpsc::unbounded_channel();
@@ -128,7 +126,6 @@ async fn reproduce(venue: &fixture::Venue, endpoint: &str) -> Result<Value> {
             .expiration_ns()
             .context("missing initial expiration")?;
 
-        // Use the same position-event path on both revisions, without cache injection or private APIs.
         msgbus::publish_position_event(
             "events.position.RETAINED-REFRESH".into(),
             &open_position(instrument),
@@ -138,7 +135,6 @@ async fn reproduce(venue: &fixture::Venue, endpoint: &str) -> Result<Value> {
         // The public refresh interval is expressed in minutes. Allow one cycle plus delivery slack.
         tokio::time::sleep(Duration::from_secs(OBSERVATION_SECS)).await;
         let mut observed_expiration = original_expiration;
-        let mut updates = 0;
         while let Ok(event) = rx.try_recv() {
             if let DataEvent::Data(Data::Instrument(instrument)) = event
                 && instrument.id() == id
@@ -146,16 +142,10 @@ async fn reproduce(venue: &fixture::Venue, endpoint: &str) -> Result<Value> {
                 observed_expiration = instrument
                     .expiration_ns()
                     .context("missing refreshed expiration")?;
-                updates += 1;
             }
         }
-        let requests = venue.requests();
         ensure!(
-            requests
-                .iter()
-                .any(|request| request["after_revision"] == true
-                    && request["query"]["end_date_max"] == fixture::DISCOVERY_END
-                    && request["returned_markets"] == 0),
+            venue.discovery_refreshed(),
             "no completed discovery request excluded the revised market"
         );
         let expected = iso8601_to_unix_nanos(fixture::REVISED_END)?;
@@ -167,21 +157,9 @@ async fn reproduce(venue: &fixture::Venue, endpoint: &str) -> Result<Value> {
             observed_expiration == original_expiration || observed_expiration == expected,
             "unexpected emitted closing time"
         );
-        Ok(json!({
-            "scenario": "open-position-outside-discovery",
-            "instrument_id": id.to_string(),
-            "position_id": "P-RETAINED",
-            "discovery_end_date_max": fixture::DISCOVERY_END,
-            "venue_end_date_after_revision": fixture::REVISED_END,
-            "original_expiration_ns": original_expiration.as_u64(),
-            "expected_expiration_ns": expected.as_u64(),
-            "observed_expiration_ns": observed_expiration.as_u64(),
-            "instrument_updates_after_revision": updates,
-            "refresh_interval_seconds": 60,
-            "observation_seconds": OBSERVATION_SECS,
-            "fresh": observed_expiration == expected,
-            "requests": requests,
-        }))
+        println!("Venue:    {}", unix_nanos_to_iso8601(expected));
+        println!("Nautilus: {}", unix_nanos_to_iso8601(observed_expiration));
+        Ok(observed_expiration == expected)
     }
     .await;
 

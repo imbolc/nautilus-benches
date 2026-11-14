@@ -1,7 +1,7 @@
 use std::{
     collections::HashMap,
     sync::{
-        Arc, Mutex,
+        Arc,
         atomic::{AtomicBool, Ordering},
     },
 };
@@ -21,7 +21,7 @@ pub const REVISED_END: &str = "2099-12-01T00:00:00Z";
 pub struct Venue {
     market: Value,
     revised: Arc<AtomicBool>,
-    requests: Arc<Mutex<Vec<Value>>>,
+    discovery_refreshed: Arc<AtomicBool>,
 }
 
 impl Venue {
@@ -29,8 +29,8 @@ impl Venue {
         self.revised.store(true, Ordering::SeqCst);
     }
 
-    pub fn requests(&self) -> Vec<Value> {
-        self.requests.lock().unwrap().clone()
+    pub fn discovery_refreshed(&self) -> bool {
+        self.discovery_refreshed.load(Ordering::SeqCst)
     }
 }
 
@@ -38,7 +38,7 @@ pub async fn serve() -> Result<(Venue, String, tokio::task::JoinHandle<std::io::
     let venue = Venue {
         market: serde_json::from_str(include_str!("../data/market.json"))?,
         revised: Arc::default(),
-        requests: Arc::default(),
+        discovery_refreshed: Arc::default(),
     };
     let listener = tokio::net::TcpListener::bind("127.0.0.1:0").await?;
     let endpoint = format!("http://{}", listener.local_addr()?);
@@ -63,12 +63,14 @@ async fn markets(
     let matches = query.get("condition_ids").is_none_or(|ids| ids.contains(condition))
         // Both fixture dates and the configured bound use the same UTC representation.
         && query.get("end_date_max").is_none_or(|maximum| end <= maximum.as_str());
-    venue.requests.lock().unwrap().push(json!({
-        "after_revision": revised,
-        "query": query,
-        "returned_markets": usize::from(matches),
-        "returned_end_date": matches.then_some(end),
-    }));
+    if revised
+        && query
+            .get("end_date_max")
+            .is_some_and(|maximum| maximum == DISCOVERY_END)
+        && !matches
+    {
+        venue.discovery_refreshed.store(true, Ordering::SeqCst);
+    }
     Json(json!({
         "markets": if matches { vec![market] } else { Vec::new() },
         "next_cursor": null,
