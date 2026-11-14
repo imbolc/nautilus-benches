@@ -12,7 +12,7 @@ waits 65 seconds for periodic refresh.
 [Develop revision b9e6f468f8](https://github.com/nautechsystems/nautilus_trader/commit/b9e6f468f8dc35088a06742aadb1866e9c274328):
 
 ```sh
-cargo run -q
+cargo run
 ```
 
 | Venue closes (UTC) | Nautilus closes (UTC) | Result |
@@ -26,7 +26,7 @@ cargo run -q
 [PR revision 3147f20283](https://github.com/imbolc/nautilus_trader/commit/3147f20283c4355212be0d93429f2f92cdbd8264):
 
 ```sh
-cargo run -q --config proposed.toml
+cargo run --config proposed.toml
 ```
 
 | Venue closes (UTC) | Nautilus closes (UTC) | Result |
